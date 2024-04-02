@@ -3,11 +3,11 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useNavigate } from "react-router-dom";
 
-const RestoListCard = () => {
+const RestoListCard = ({ data }) => {
   const navigate = useNavigate();
   return (
     <Card
-      onClick={() => navigate("/resto")}
+      onClick={() => navigate(`/resto/${data.id}`)}
       sx={{
         minWidth: 275,
         width: { xs: "95%", md: "80%" },
@@ -21,7 +21,7 @@ const RestoListCard = () => {
             fontSize: { xs: 16, sm: 20 },
             marginBottom: 0.5,
           }}>
-          King Ayam Goreng Bandung
+          {data.name}
         </Typography>
         <Grid container spacing={0.5}>
           <Grid item xs={3.5} sm={2}>
@@ -47,7 +47,7 @@ const RestoListCard = () => {
                 }}
                 noWrap
                 color="text.secondary">
-                Jalan Soekarno Hatta No. 36
+                {data.alamat}
               </Typography>
             </Box>
           </Grid>
@@ -61,7 +61,7 @@ const RestoListCard = () => {
             <Typography
               sx={{ fontSize: { xs: 13, sm: 15 } }}
               color="text.secondary">
-              08.00-16.00 WIB
+              {data.timeOpen} WIB
             </Typography>
           </Grid>
         </Grid>

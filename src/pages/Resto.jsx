@@ -5,6 +5,10 @@ import FoodInfoCard from "../components/FoodInfoCard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import ErrorSnackbar from "../components/ErrorSnackbar";
 
 const foodData = [
   {
@@ -45,6 +49,26 @@ const foodData = [
 ];
 
 const Resto = () => {
+  const { id } = useParams();
+  console.log(id);
+
+  const [restoData, setRestoData] = useState();
+  const [error, setError] = useState(false);
+  useEffect(() => {
+    async function fetchRestoData() {
+      await axios
+        .get(`http://localhost:8080/master-management/menus/${id}`)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+          setError(true);
+        });
+    }
+    fetchRestoData();
+  }, [id]);
+
   return (
     <Box
       sx={{
@@ -59,6 +83,10 @@ const Resto = () => {
         <KeyboardArrowLeftIcon />
       </IconButton>
       <img src={ayamGorengImg} className="image-cover" alt="resto-image" />
+
+      {error ? (
+        <ErrorSnackbar message="Terjadi kesalahan server. Coba lagi nanti." />
+      ) : null}
 
       <RestoInfoCard />
 

@@ -73,6 +73,8 @@ const Login = () => {
           setSuccess(true);
           console.log(response);
 
+          localStorage.setItem("userId", response.data.data.userId);
+
           setTimeout(() => {
             navigate("/home");
           }, 3000);
