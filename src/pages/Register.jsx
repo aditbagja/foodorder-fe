@@ -16,6 +16,7 @@ import {
 import axios from "axios";
 import { useState } from "react";
 import SuccessSnackbar from "../components/SuccessSnackbar";
+import ErrorSnackbar from "../components/ErrorSnackbar";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
@@ -44,6 +45,8 @@ const Register = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleChange = (event) => {
     const { name } = event.target;
@@ -76,23 +79,27 @@ const Register = () => {
         .post("http://localhost:8080/user-management/sign-up", formData)
         .then((response) => {
           setLoading(true);
+          setSuccess(true);
           console.log(response);
+
+          setTimeout(() => {
+            navigate("/");
+          }, 3000);
         })
         .catch((error) => {
           console.log(error);
           setLoading(false);
-        })
-        .finally(() => {
-          setTimeout(() => {
-            navigate("/");
-          }, 3000);
+          setError(true);
         });
     }
   };
 
   return (
     <Box paddingY={24} sx={{ backgroundColor: "#eeee" }}>
-      {loading ? <SuccessSnackbar message="Registrasi Berhasil" /> : null}
+      {success ? <SuccessSnackbar message="Registrasi Berhasil." /> : null}
+      {error ? (
+        <ErrorSnackbar message="Terjadi kesalahan server. Coba lagi nanti." />
+      ) : null}
       <Box
         display="flex"
         width={{ xs: "90%", md: "50%" }}
