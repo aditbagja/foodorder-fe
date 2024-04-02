@@ -1,0 +1,28 @@
+:root {
+  font-family: "Roboto", sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+.image-cover {
+  height: 25vh;
+  width: 100%;
+  object-fit: cover;
+}
+
+.image-order {
+  height: 50vh;
+  width: 100%;
+}
+
+.image-detail-order {
+  width: 100%;
+}
+
+@media only screen and (min-width: 600px) {
+  .image-cover {
+    height: 50vh;
+  }
+}
