@@ -13,7 +13,10 @@ const SuccessSnackbar = ({ message }) => {
       open={openSnackbar}
       onClose={handleCloseSnackbar}
       autoHideDuration={3000}>
-      <Alert severity="success" variant="filled" sx={{ width: "100%" }}>
+      <Alert
+        severity="success"
+        variant="filled"
+        sx={{ width: "100%", textAlign: "center" }}>
         {message}
       </Alert>
     </Snackbar>

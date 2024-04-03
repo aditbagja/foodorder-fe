@@ -9,57 +9,24 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ErrorSnackbar from "../components/ErrorSnackbar";
-
-const foodData = [
-  {
-    id: 1,
-    nama: "Ayam Goreng",
-    harga: 10_000,
-    rating: 4,
-    level: 1,
-  },
-  {
-    id: 2,
-    nama: "Ayam Geprek",
-    harga: 15_000,
-    rating: 4.5,
-    level: 1,
-  },
-  {
-    id: 3,
-    nama: "Ayam Geprek",
-    harga: 15_000,
-    rating: 4.5,
-    level: 4,
-  },
-  {
-    id: 4,
-    nama: "Ayam Crispy",
-    harga: 8_000,
-    rating: 4.5,
-    level: 3,
-  },
-  {
-    id: 5,
-    nama: "Ayam Bakar",
-    harga: 30_000,
-    rating: 5,
-    level: 4,
-  },
-];
+import SuccessSnackbar from "../components/SuccessSnackbar";
 
 const Resto = () => {
   const { id } = useParams();
-  console.log(id);
 
   const [restoData, setRestoData] = useState();
+  const [menuData, setMenuData] = useState();
   const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState();
+
   useEffect(() => {
     async function fetchRestoData() {
       await axios
         .get(`http://localhost:8080/master-management/menus/${id}`)
         .then((response) => {
-          console.log(response);
+          setRestoData(response.data.data.resto);
+          setMenuData(response.data.data.menus);
         })
         .catch((error) => {
           console.log(error);
@@ -88,7 +55,9 @@ const Resto = () => {
         <ErrorSnackbar message="Terjadi kesalahan server. Coba lagi nanti." />
       ) : null}
 
-      <RestoInfoCard />
+      {success ? <SuccessSnackbar message={successMessage} /> : null}
+
+      {restoData ? <RestoInfoCard data={restoData} /> : null}
 
       <Typography
         sx={{
@@ -100,7 +69,14 @@ const Resto = () => {
         Pilihan Menu
       </Typography>
 
-      <FoodInfoCard data={foodData} />
+      {restoData ? (
+        <FoodInfoCard
+          data={menuData}
+          restoId={restoData.restoId}
+          setSuccess={setSuccess}
+          setSuccessMessage={setSuccessMessage}
+        />
+      ) : null}
 
       <Button
         variant="contained"

@@ -1,7 +1,7 @@
 import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 
-const RestoInfoCard = () => {
+const RestoInfoCard = ({ data }) => {
   return (
     <Card
       sx={{
@@ -18,7 +18,7 @@ const RestoInfoCard = () => {
             fontSize: { xs: 16, sm: 20 },
             marginBottom: 0.5,
           }}>
-          King Ayam Goreng Bandung
+          {data.restoName}
         </Typography>
         <Grid container spacing={0.5}>
           <Grid item xs={8.5} sm={10}>
@@ -32,7 +32,7 @@ const RestoInfoCard = () => {
                 }}
                 noWrap
                 color="text.secondary">
-                Jalan Soekarno Hatta No. 36
+                {data.alamat}
               </Typography>
             </Box>
           </Grid>
@@ -46,7 +46,7 @@ const RestoInfoCard = () => {
             <Typography
               sx={{ fontSize: { xs: 13, sm: 15 } }}
               color="text.secondary">
-              08.00-16.00 WIB
+              {data.timeOpen} WIB
             </Typography>
           </Grid>
         </Grid>

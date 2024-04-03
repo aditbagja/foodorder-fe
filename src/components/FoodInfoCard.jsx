@@ -10,14 +10,36 @@ import {
 } from "@mui/material";
 import ayamGeprekImg from "../assets/ayam-geprek.jpeg";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import axios from "axios";
 
-const FoodInfoCard = ({ data }) => {
+const FoodInfoCard = ({ data, restoId, setSuccess, setSuccessMessage }) => {
+  const clickAddToCart = async (menuId) => {
+    await axios
+      .post("http://localhost:8080/food-order/add-to-cart", {
+        userId: localStorage.getItem("userId"),
+        restoId: restoId,
+        menuId: menuId,
+      })
+      .then((response) => {
+        console.log({ response });
+        setSuccess(true);
+        setSuccessMessage(response.data.message);
+
+        setTimeout(() => {
+          setSuccess(false);
+        }, 2000);
+      })
+      .catch((error) => {
+        console.log({ error });
+      });
+  };
+
   return (
     <>
       {data ? (
         data.map((food) => (
           <Card
-            key={food.id}
+            key={food.menuId}
             sx={{
               display: "flex",
               minWidth: 275,
@@ -40,7 +62,7 @@ const FoodInfoCard = ({ data }) => {
                       fontWeight: "bold",
                       fontSize: { xs: 13, sm: 16, md: 18 },
                     }}>
-                    {food.nama}
+                    {food.menuName}
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -92,6 +114,9 @@ const FoodInfoCard = ({ data }) => {
                   <Button
                     size="small"
                     variant="contained"
+                    onClick={() => {
+                      clickAddToCart(food.menuId);
+                    }}
                     sx={{
                       textTransform: "none",
                       backgroundColor: "#0A9830",
