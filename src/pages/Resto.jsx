@@ -49,7 +49,7 @@ const Resto = () => {
         href="/home">
         <KeyboardArrowLeftIcon />
       </IconButton>
-      <img src={ayamGorengImg} className="image-cover" alt="resto-image" />
+      <img src={ayamGorengImg} className="image-cover" alt="foto makanan" />
 
       {error ? (
         <ErrorSnackbar message="Terjadi kesalahan server. Coba lagi nanti." />

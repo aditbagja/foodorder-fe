@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import NavbarHome from "../components/NavbarHome";
 import OrderListCard from "../components/OrderListCard";
 import { useEffect, useState } from "react";
@@ -8,7 +8,8 @@ import ErrorSnackbar from "../components/ErrorSnackbar";
 const OrderList = () => {
   const userId = localStorage.getItem("userId");
   const [orderData, setOrderData] = useState([]);
-  const [error, setError] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
 
   useEffect(() => {
     async function fetchOrderData() {
@@ -19,7 +20,12 @@ const OrderList = () => {
         })
         .catch((error) => {
           console.log({ error });
-          setError(true);
+          if (error.response.status === 404) {
+            setIsError(false);
+            setIsEmpty(true);
+          } else {
+            setIsError(true);
+          }
         });
     }
     fetchOrderData();
@@ -27,16 +33,22 @@ const OrderList = () => {
 
   return (
     <>
-      {error ? (
+      {isError ? (
         <ErrorSnackbar message="Terjadi kesalahan server. Coba lagi nanti." />
       ) : null}
       <NavbarHome />
 
-      {orderData.map((data) => (
-        <Box marginTop={3} key={data.orderId}>
-          <OrderListCard data={data} />
-        </Box>
-      ))}
+      {isEmpty ? (
+        <Typography sx={{ paddingTop: 24, textAlign: "center" }}>
+          Data tidak ditemukan..
+        </Typography>
+      ) : (
+        orderData.map((data) => (
+          <Box marginTop={3} key={data.orderId}>
+            <OrderListCard data={data} />
+          </Box>
+        ))
+      )}
     </>
   );
 };

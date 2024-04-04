@@ -2,117 +2,145 @@ import { Box, Button, Grid, Typography } from "@mui/material";
 import KeranjangCard from "../components/KeranjangCard";
 import AlamatCard from "../components/AlamatCard";
 import SimpleNavbar from "../components/SimpleNavbar";
-
-const cartData = [
-  {
-    id: 1,
-    nama: "Ayam Goreng",
-    harga: 10_000,
-    level: 1,
-  },
-  {
-    id: 2,
-    nama: "Ayam Geprek",
-    harga: 15_000,
-    level: 1,
-  },
-];
+import { useEffect, useState } from "react";
+import axios from "axios";
+import ErrorSnackbar from "../components/ErrorSnackbar";
 
 const Keranjang = () => {
+  const [cartData, setCartData] = useState();
+  const [isError, setIsError] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
+
+  async function fetchCartData() {
+    const userId = localStorage.getItem("userId");
+
+    await axios
+      .get(`http://localhost:8080/food-order/cart/${userId}`)
+      .then((response) => {
+        setCartData(response.data.data);
+      })
+      .catch((error) => {
+        console.log({ error });
+        if (error.response.status === 404) {
+          setIsError(false);
+          setIsEmpty(true);
+        } else {
+          setIsError(true);
+        }
+      });
+  }
+
+  useEffect(() => {
+    fetchCartData();
+  }, []);
+
+  console.log({ cartData });
+
   return (
     <>
+      {isError ? (
+        <ErrorSnackbar message="Terjadi kesalahan server. Coba lagi nanti." />
+      ) : null}
+
       <SimpleNavbar backLink="/home" title="Keranjang" />
 
-      <Box
-        sx={{
-          backgroundColor: "#eeee",
-          paddingY: 3,
-        }}>
-        <Typography
-          sx={{
-            fontWeight: "medium",
-            marginBottom: 2,
-            display: "flex",
-            marginX: "auto",
-            width: { xs: "95%", md: "80%" },
-          }}>
-          Pesanan Anda
+      {isEmpty ? (
+        <Typography sx={{ paddingTop: 24, textAlign: "center" }}>
+          Data tidak ditemukan..
         </Typography>
-
-        <KeranjangCard data={cartData} />
-
-        <Typography
+      ) : cartData ? (
+        <Box
           sx={{
-            fontWeight: "medium",
-            marginBottom: 2,
-            display: "flex",
-            marginX: "auto",
-            width: { xs: "95%", md: "80%" },
-          }}>
-          Alamat
-        </Typography>
-
-        <AlamatCard />
-
-        <Grid
-          container
-          sx={{
-            display: "flex",
-            marginX: "auto",
-            width: { xs: "95%", md: "80%" },
+            backgroundColor: "#eeee",
             paddingY: 3,
           }}>
-          <Grid item xs={6}>
-            <Typography>Ongkos Kirim</Typography>
+          <Typography
+            sx={{
+              fontWeight: "medium",
+              marginBottom: 2,
+              display: "flex",
+              marginX: "auto",
+              width: { xs: "95%", md: "80%" },
+            }}>
+            Pesanan Anda
+          </Typography>
+
+          <KeranjangCard data={cartData} fetchCartData={fetchCartData()} />
+
+          <Typography
+            sx={{
+              fontWeight: "medium",
+              marginBottom: 2,
+              display: "flex",
+              marginX: "auto",
+              width: { xs: "95%", md: "80%" },
+            }}>
+            Alamat
+          </Typography>
+
+          <AlamatCard alamat={cartData.customer.alamat} />
+
+          <Grid
+            container
+            sx={{
+              display: "flex",
+              marginX: "auto",
+              width: { xs: "95%", md: "80%" },
+              paddingY: 3,
+            }}>
+            <Grid item xs={6}>
+              <Typography>Total Makanan</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography
+                sx={{
+                  textAlign: "right",
+                }}>
+                {cartData.totalMakanan}
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography
+                sx={{
+                  fontWeight: "medium",
+                }}>
+                Total Harga
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography
+                sx={{
+                  fontWeight: "medium",
+                  textAlign: "right",
+                }}>
+                Rp.{cartData.totalHarga}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                size="large"
+                href="/order-progress"
+                sx={{
+                  width: { xs: "95%", md: "80%" },
+                  backgroundColor: "#0A9830",
+                  ":hover": { backgroundColor: "#0A9830" },
+                  textTransform: "none",
+                  display: "flex",
+                  gap: 1,
+                  marginX: "auto",
+                  marginTop: 1,
+                }}>
+                <Typography>Pesan Sekarang</Typography>
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <Typography
-              sx={{
-                textAlign: "right",
-              }}>
-              Rp. 20000
-            </Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography
-              sx={{
-                fontWeight: "medium",
-              }}>
-              Total
-            </Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography
-              sx={{
-                fontWeight: "medium",
-                textAlign: "right",
-              }}>
-              Rp.{" "}
-              {cartData
-                .map((data) => data.harga)
-                .reduce((prev, current) => prev + current, 20000)}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              variant="contained"
-              size="large"
-              href="/order-progress"
-              sx={{
-                width: { xs: "95%", md: "80%" },
-                backgroundColor: "#0A9830",
-                ":hover": { backgroundColor: "#0A9830" },
-                textTransform: "none",
-                display: "flex",
-                gap: 1,
-                marginX: "auto",
-                marginTop: 1,
-              }}>
-              <Typography>Pesan Sekarang</Typography>
-            </Button>
-          </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      ) : (
+        <Typography sx={{ textAlign: "center", paddingTop: 24 }}>
+          Loading...
+        </Typography>
+      )}
     </>
   );
 };
