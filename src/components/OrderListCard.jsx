@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 const OrderListCard = ({ data }) => {
-  console.log({ data });
   const navigate = useNavigate();
   return (
     <Card

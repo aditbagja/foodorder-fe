@@ -72,7 +72,7 @@ const FoodInfoCard = ({ data, restoId, setSuccess, setSuccessMessage }) => {
                       fontSize: { xs: 13, sm: 16, md: 18 },
                       textAlign: "right",
                     }}>
-                    Rp. {food.harga}
+                    Rp. {food.harga.toLocaleString("id-ID")}
                   </Typography>
                 </Grid>
                 <Grid item xs={12}>

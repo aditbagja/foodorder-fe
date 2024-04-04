@@ -53,9 +53,11 @@ const KeranjangCard = ({ data, fetchCartData }) => {
                         fontSize: { xs: 13, sm: 16, md: 18 },
                       }}>
                       {food.menuName}{" "}
-                      <Typography component="span">
+                      <Typography
+                        component="span"
+                        sx={{ fontSize: { xs: 13, sm: 16, md: 18 } }}>
                         {" "}
-                        x {food.quantity}
+                        x{food.quantity}
                       </Typography>
                     </Typography>
                   </Grid>
@@ -66,7 +68,7 @@ const KeranjangCard = ({ data, fetchCartData }) => {
                         fontSize: { xs: 13, sm: 16, md: 18 },
                         textAlign: "right",
                       }}>
-                      Rp. {food.harga}
+                      Rp. {food.harga.toLocaleString("id-ID")}
                     </Typography>
                   </Grid>
                   <Grid item xs={12}>

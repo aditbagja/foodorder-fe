@@ -100,12 +100,15 @@ const Keranjang = () => {
               paddingY: 3,
             }}>
             <Grid item xs={6}>
-              <Typography>Total Quantity Makanan</Typography>
+              <Typography sx={{ fontSize: { xs: 13, sm: 16, md: 18 } }}>
+                Total Quantity Makanan
+              </Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography
                 sx={{
                   textAlign: "right",
+                  fontSize: { xs: 13, sm: 16, md: 18 },
                 }}>
                 {cartData.totalMakanan}
               </Typography>
@@ -114,6 +117,7 @@ const Keranjang = () => {
               <Typography
                 sx={{
                   fontWeight: "medium",
+                  fontSize: { xs: 13, sm: 16, md: 18 },
                 }}>
                 Total Harga
               </Typography>
@@ -123,8 +127,9 @@ const Keranjang = () => {
                 sx={{
                   fontWeight: "medium",
                   textAlign: "right",
+                  fontSize: { xs: 13, sm: 16, md: 18 },
                 }}>
-                Rp.{cartData.totalHarga}
+                Rp.{cartData.totalHarga.toLocaleString("id-ID")}
               </Typography>
             </Grid>
             <Grid item xs={12}>

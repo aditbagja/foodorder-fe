@@ -10,6 +10,7 @@ import SuccessSnackbar from "../components/SuccessSnackbar";
 const OrderDetail = () => {
   const { id } = useParams();
   const [orderData, setOrderData] = useState();
+  const [formattedDate, setFormattedDate] = useState();
   const [isError, setIsError] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
@@ -22,6 +23,22 @@ const OrderDetail = () => {
         .then((response) => {
           console.log({ response });
           setOrderData(response.data.data);
+
+          const timestamp = response.data.data.orderDate;
+          const options = {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric",
+          };
+
+          setFormattedDate(
+            new Intl.DateTimeFormat("id-ID", options).format(
+              new Date(timestamp)
+            )
+          );
         })
         .catch((error) => {
           console.log({ error });
@@ -58,8 +75,6 @@ const OrderDetail = () => {
       });
   };
 
-  console.log({ orderData });
-
   return (
     <>
       <SimpleNavbar backLink="/order-list" title="Detail Order" />
@@ -80,15 +95,32 @@ const OrderDetail = () => {
             justifyContent="space-between"
             minHeight="100vh">
             <Box>
-              <Typography
-                sx={{ fontSize: { xs: 14, sm: 18 }, fontWeight: "light" }}>
-                Pesananmu dari{" "}
-                <Typography
-                  component="span"
-                  sx={{ fontSize: { xs: 14, sm: 18 }, fontWeight: "medium" }}>
-                  {orderData.detail.resto.name}
-                </Typography>
-              </Typography>
+              <Grid container marginBottom={3}>
+                <Grid item xs={6}>
+                  <Typography
+                    sx={{ fontSize: { xs: 14, sm: 18 }, fontWeight: "light" }}>
+                    Pesananmu dari{" "}
+                    <Typography
+                      component="span"
+                      sx={{
+                        fontSize: { xs: 14, sm: 18 },
+                        fontWeight: "medium",
+                      }}>
+                      {orderData.detail.resto.name}
+                    </Typography>
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: 14, sm: 18 },
+                      fontWeight: "light",
+                      textAlign: "right",
+                    }}>
+                    {formattedDate}
+                  </Typography>
+                </Grid>
+              </Grid>
 
               {orderData.detail.menu.map((data) => (
                 <Grid container marginTop={0.5} spacing={2} key={data.id}>
@@ -102,27 +134,29 @@ const OrderDetail = () => {
                   <Grid item xs={6} md={7}>
                     <Typography sx={{ fontSize: { xs: 14, sm: 18 } }}>
                       {data.menuName}{" "}
-                      <Typography component="span">
-                        x {data.quantity}
+                      <Typography
+                        component="span"
+                        sx={{ fontSize: { xs: 14, sm: 18 } }}>
+                        x{data.quantity}
                       </Typography>
                     </Typography>
                   </Grid>
                   <Grid item xs={3}>
                     <Typography
                       sx={{ textAlign: "right", fontSize: { xs: 14, sm: 18 } }}>
-                      Rp. {data.harga}
+                      Rp. {data.harga.toLocaleString("id-ID")}
                     </Typography>
                   </Grid>
                 </Grid>
               ))}
 
               <Grid container marginTop={3}>
-                <Grid item xs={6} marginTop={3}>
+                <Grid item xs={8} marginTop={3}>
                   <Typography sx={{ fontSize: { xs: 14, sm: 18 } }}>
                     Total Quantity Makanan
                   </Typography>
                 </Grid>
-                <Grid item xs={6} marginTop={3}>
+                <Grid item xs={4} marginTop={3}>
                   <Typography
                     sx={{
                       fontSize: { xs: 14, sm: 18 },
@@ -144,7 +178,7 @@ const OrderDetail = () => {
                       textAlign: "right",
                       fontWeight: "bold",
                     }}>
-                    Rp. {orderData.total}
+                    Rp. {orderData.total.toLocaleString("id-ID")}
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
