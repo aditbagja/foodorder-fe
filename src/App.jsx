@@ -23,7 +23,7 @@ function App() {
             <Route path="/keranjang" element={<Keranjang />} />
             <Route path="/order-progress" element={<Order />} />
             <Route path="/order-list" element={<OrderList />} />
-            <Route path="/order/id" element={<OrderDetail />} />
+            <Route path="/order/:id" element={<OrderDetail />} />
           </Routes>
         </Router>
       </ThemeProvider>

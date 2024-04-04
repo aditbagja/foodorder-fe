@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 const OrderListCard = ({ data }) => {
+  console.log({ data });
   const navigate = useNavigate();
   return (
     <Card
-      onClick={() => navigate("/order/id")}
+      onClick={() => navigate(`/order/${data.orderId}`)}
       sx={{
         minWidth: 275,
         width: { xs: "95%", md: "80%" },

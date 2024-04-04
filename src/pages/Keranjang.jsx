@@ -30,11 +30,22 @@ const Keranjang = () => {
       });
   }
 
+  const clickCreateOrder = async () => {
+    const userId = localStorage.getItem("userId");
+
+    await axios
+      .post(`http://localhost:8080/food-order/order/${userId}`)
+      .then((response) => {
+        console.log({ response });
+      })
+      .catch((error) => {
+        console.log({ error });
+      });
+  };
+
   useEffect(() => {
     fetchCartData();
   }, []);
-
-  console.log({ cartData });
 
   return (
     <>
@@ -89,7 +100,7 @@ const Keranjang = () => {
               paddingY: 3,
             }}>
             <Grid item xs={6}>
-              <Typography>Total Makanan</Typography>
+              <Typography>Total Quantity Makanan</Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography
@@ -121,6 +132,7 @@ const Keranjang = () => {
                 variant="contained"
                 size="large"
                 href="/order-progress"
+                onClick={clickCreateOrder}
                 sx={{
                   width: { xs: "95%", md: "80%" },
                   backgroundColor: "#0A9830",
