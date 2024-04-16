@@ -3,7 +3,6 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 
 const SimpleNavbar = ({ backLink, title }) => {
   return (
-    <>
       <Box
         sx={{
           backgroundColor: "#01b14e",
@@ -26,7 +25,6 @@ const SimpleNavbar = ({ backLink, title }) => {
           {title}
         </Typography>
       </Box>
-    </>
   );
 };
 
